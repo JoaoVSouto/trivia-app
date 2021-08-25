@@ -1,6 +1,7 @@
 import { ListItem, ListItemText, Theme } from '@material-ui/core';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
+import parse from 'html-react-parser';
 
 import { theme } from 'styles/theme';
 
@@ -55,7 +56,7 @@ export function AnswerButton({
       className={clsx(styles.listItem, styles.coloration)}
       onClick={onClick}
     >
-      <ListItemText primary={sentence} />
+      <ListItemText primary={parse(sentence)} />
     </ListItem>
   );
 }

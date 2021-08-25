@@ -13,8 +13,14 @@ type TriviaContextData = {
   questionsQuantity: number;
   isFetchingQuestions: boolean;
   currentQuestions: Question[];
+  currentPage: number;
+  correctQuestions: number[];
+  wrongQuestions: number[];
   updateQuestionsQuantity: (quantity: number) => void;
   playTrivia: () => void;
+  moveToNextPage: () => void;
+  addCorrectQuestion: () => void;
+  addWrongQuestion: () => void;
 };
 
 const TriviaContext = React.createContext({} as TriviaContextData);
@@ -27,6 +33,9 @@ export function TriviaProvider({ children }: TriviaProviderProps) {
   const [currentQuestions, setCurrentQuestions] = React.useState<Question[]>(
     []
   );
+  const [correctQuestions, setCorrectQuestions] = React.useState<number[]>([]);
+  const [wrongQuestions, setWrongQuestions] = React.useState<number[]>([]);
+  const [currentPage, setCurrentPage] = React.useState(0);
 
   function updateQuestionsQuantity(newQuestionsQuantity: number) {
     setQuestionsQuantity(newQuestionsQuantity);
@@ -53,14 +62,32 @@ export function TriviaProvider({ children }: TriviaProviderProps) {
     router.push('/trivia');
   }
 
+  function moveToNextPage() {
+    setCurrentPage(state => state + 1);
+  }
+
+  function addCorrectQuestion() {
+    setCorrectQuestions(state => [...state, currentPage]);
+  }
+
+  function addWrongQuestion() {
+    setWrongQuestions(state => [...state, currentPage]);
+  }
+
   return (
     <TriviaContext.Provider
       value={{
         questionsQuantity,
         isFetchingQuestions,
         currentQuestions,
+        currentPage,
+        correctQuestions,
+        wrongQuestions,
         updateQuestionsQuantity,
         playTrivia,
+        moveToNextPage,
+        addCorrectQuestion,
+        addWrongQuestion,
       }}
     >
       {children}
