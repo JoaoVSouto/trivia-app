@@ -9,6 +9,8 @@ import {
 import { makeStyles, createStyles } from '@material-ui/core/styles';
 import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 import clsx from 'clsx';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -40,8 +42,25 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
+const GameSetupSchema = Yup.object().shape({
+  quantity: Yup.number()
+    .min(3, 'The quantity should be between 3 and 50')
+    .max(50, 'The quantity should be between 3 and 50')
+    .required('Quantity is required'),
+});
+
 export default function Home() {
   const styles = useStyles();
+
+  const formik = useFormik({
+    initialValues: {
+      quantity: '',
+    },
+    validationSchema: GameSetupSchema,
+    onSubmit: values => {
+      console.log('submit', values);
+    },
+  });
 
   return (
     <Container maxWidth="sm" className={styles.root}>
@@ -61,13 +80,18 @@ export default function Home() {
         >
           How many questions do you want to answer?
         </Typography>
-        <form autoComplete="off">
+        <form autoComplete="off" onSubmit={formik.handleSubmit}>
           <TextField
             type="number"
             id="questions-quantity"
+            name="quantity"
             label="Quantity"
             variant="outlined"
             fullWidth
+            value={formik.values.quantity}
+            onChange={formik.handleChange}
+            error={Boolean(formik.touched.quantity && formik.errors.quantity)}
+            helperText={formik.errors.quantity}
           />
           <div className={styles.btnContainer}>
             <Button
