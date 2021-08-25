@@ -63,7 +63,7 @@ export default function Home() {
   });
 
   return (
-    <Container maxWidth="sm" className={styles.root}>
+    <Container className={styles.root}>
       <Box>
         <Typography
           className={clsx(styles.mainTitle, styles.title)}
