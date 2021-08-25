@@ -1,6 +1,13 @@
 import * as React from 'react';
 import { useRouter } from 'next/router';
-import { Container, Box, Typography, Theme, Button } from '@material-ui/core';
+import {
+  Container,
+  Box,
+  Typography,
+  Theme,
+  Button,
+  CircularProgress,
+} from '@material-ui/core';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
 import SportsEsportsIcon from '@material-ui/icons/SportsEsports';
 import NavigateBeforeIcon from '@material-ui/icons/NavigateBefore';
@@ -42,7 +49,12 @@ export default function Home() {
 
   const router = useRouter();
 
-  const { questionsQuantity, updateQuestionsQuantity } = useTrivia();
+  const {
+    questionsQuantity,
+    updateQuestionsQuantity,
+    playTrivia,
+    isFetchingQuestions,
+  } = useTrivia();
 
   React.useEffect(() => {
     if (questionsQuantity === 0) {
@@ -66,9 +78,15 @@ export default function Home() {
           <Button
             variant="contained"
             color="primary"
-            endIcon={<SportsEsportsIcon />}
+            endIcon={!isFetchingQuestions && <SportsEsportsIcon />}
+            onClick={playTrivia}
+            disabled={isFetchingQuestions}
           >
-            Let&apos;s play!
+            {isFetchingQuestions ? (
+              <CircularProgress color="inherit" size={20} />
+            ) : (
+              "Let's play!"
+            )}
           </Button>
           <Button
             className={styles.goBackBtn}
@@ -76,6 +94,7 @@ export default function Home() {
             color="default"
             endIcon={<NavigateBeforeIcon />}
             onClick={handleGoBack}
+            disabled={isFetchingQuestions}
           >
             Go back
           </Button>

@@ -55,6 +55,7 @@
     "@next/next/no-img-element": "off",
     "class-methods-use-this": "off",
     "no-unused-vars": "off",
+    "camelcase": "off",
     "@typescript-eslint/no-unused-vars": "error",
     "no-use-before-define": "off",
     "@typescript-eslint/no-use-before-define": [
