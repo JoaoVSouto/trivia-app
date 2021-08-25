@@ -1,5 +1,5 @@
 import { ListItem, ListItemText, Theme } from '@material-ui/core';
-import { makeStyles, createStyles } from '@material-ui/core/styles';
+import { makeStyles, createStyles, darken } from '@material-ui/core/styles';
 import clsx from 'clsx';
 import parse from 'html-react-parser';
 
@@ -18,13 +18,25 @@ type StylesProps = {
 };
 
 type VariantColors = {
-  [K in Variants]: string;
+  [K in Variants]: {
+    regular: string;
+    hover: string;
+  };
 };
 
 const variantColors: VariantColors = {
-  correct: theme.palette.success.main,
-  default: theme.palette.grey[600],
-  wrong: theme.palette.error.main,
+  correct: {
+    regular: theme.palette.success.main,
+    hover: darken(theme.palette.success.main, 0.2),
+  },
+  wrong: {
+    regular: theme.palette.error.main,
+    hover: darken(theme.palette.error.main, 0.2),
+  },
+  default: {
+    regular: theme.palette.grey[600],
+    hover: darken(theme.palette.grey[600], 0.2),
+  },
 };
 
 const useStyles = makeStyles((muiTheme: Theme) =>
@@ -38,7 +50,11 @@ const useStyles = makeStyles((muiTheme: Theme) =>
     },
 
     coloration: ({ variant }: StylesProps) => ({
-      backgroundColor: variantColors[variant],
+      backgroundColor: variantColors[variant].regular,
+
+      '&:hover, &:focus': {
+        backgroundColor: variantColors[variant].hover,
+      },
     }),
   })
 );
