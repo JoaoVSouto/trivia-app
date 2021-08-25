@@ -1,7 +1,11 @@
+import * as React from 'react';
+import { useRouter } from 'next/router';
 import { Container, Box, Typography, Theme, Button } from '@material-ui/core';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
 import SportsEsportsIcon from '@material-ui/icons/SportsEsports';
 import NavigateBeforeIcon from '@material-ui/icons/NavigateBefore';
+
+import { useTrivia } from 'contexts/TriviaContext';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -36,6 +40,21 @@ const useStyles = makeStyles((theme: Theme) =>
 export default function Home() {
   const styles = useStyles();
 
+  const router = useRouter();
+
+  const { questionsQuantity, updateQuestionsQuantity } = useTrivia();
+
+  React.useEffect(() => {
+    if (questionsQuantity === 0) {
+      router.push('/');
+    }
+  }, [questionsQuantity, router]);
+
+  function handleGoBack() {
+    updateQuestionsQuantity(0);
+    router.push('/');
+  }
+
   return (
     <Container className={styles.root}>
       <Box>
@@ -56,6 +75,7 @@ export default function Home() {
             variant="outlined"
             color="default"
             endIcon={<NavigateBeforeIcon />}
+            onClick={handleGoBack}
           >
             Go back
           </Button>

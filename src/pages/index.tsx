@@ -1,3 +1,4 @@
+import { useRouter } from 'next/router';
 import {
   Container,
   Box,
@@ -11,6 +12,8 @@ import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 import clsx from 'clsx';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
+
+import { useTrivia } from 'contexts/TriviaContext';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -52,13 +55,18 @@ const GameSetupSchema = Yup.object().shape({
 export default function Home() {
   const styles = useStyles();
 
+  const router = useRouter();
+
+  const { updateQuestionsQuantity } = useTrivia();
+
   const formik = useFormik({
     initialValues: {
       quantity: '',
     },
     validationSchema: GameSetupSchema,
     onSubmit: values => {
-      console.log('submit', values);
+      updateQuestionsQuantity(Number(values.quantity));
+      router.push('/lobby');
     },
   });
 
@@ -91,7 +99,7 @@ export default function Home() {
             value={formik.values.quantity}
             onChange={formik.handleChange}
             error={Boolean(formik.touched.quantity && formik.errors.quantity)}
-            helperText={formik.errors.quantity}
+            helperText={formik.touched.quantity && formik.errors.quantity}
           />
           <div className={styles.btnContainer}>
             <Button
