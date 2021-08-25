@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useRouter } from 'next/router';
 
 import { Question } from 'models/Question';
 
@@ -19,6 +20,8 @@ type TriviaContextData = {
 const TriviaContext = React.createContext({} as TriviaContextData);
 
 export function TriviaProvider({ children }: TriviaProviderProps) {
+  const router = useRouter();
+
   const [questionsQuantity, setQuestionsQuantity] = React.useState(0);
   const [isFetchingQuestions, setIsFetchingQuestions] = React.useState(false);
   const [currentQuestions, setCurrentQuestions] = React.useState<Question[]>(
@@ -45,8 +48,9 @@ export function TriviaProvider({ children }: TriviaProviderProps) {
     }
   }
 
-  function playTrivia() {
-    fetchQuestions();
+  async function playTrivia() {
+    await fetchQuestions();
+    router.push('/trivia');
   }
 
   return (

@@ -1,3 +1,5 @@
+import * as React from 'react';
+import { useRouter } from 'next/router';
 import {
   Container,
   Box,
@@ -8,6 +10,8 @@ import {
 } from '@material-ui/core';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
 import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight';
+
+import { useTrivia } from 'contexts/TriviaContext';
 
 import { StepperDot } from 'components/StepperDot';
 import { AnswerButton } from 'components/AnswerButton';
@@ -42,6 +46,16 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export default function Trivia() {
   const styles = useStyles();
+
+  const router = useRouter();
+
+  const { currentQuestions } = useTrivia();
+
+  React.useEffect(() => {
+    if (currentQuestions.length === 0) {
+      router.push('/');
+    }
+  }, [currentQuestions.length, router]);
 
   if (!process.browser) {
     return null;
