@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
     btnContainer: {
       display: 'flex',
-      justifyContent: 'flex-end',
+      justifyContent: 'center',
       marginTop: theme.spacing(2),
     },
 
