@@ -1,16 +1,12 @@
 import * as React from 'react';
 import { AppProps } from 'next/app';
 import Head from 'next/head';
-import { ThemeProvider, createTheme } from '@material-ui/core/styles';
+import { ThemeProvider } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 
+import { theme } from 'styles/theme';
+
 function MyApp({ Component, pageProps }: AppProps) {
-  React.useEffect(() => {
-    const jssStyles = document.querySelector('#jss-server-side');
-
-    jssStyles?.remove();
-  }, []);
-
   return (
     <>
       <Head>
@@ -21,7 +17,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         />
       </Head>
 
-      <ThemeProvider theme={createTheme({})}>
+      <ThemeProvider theme={theme}>
         <CssBaseline />
         <Component {...pageProps} />
       </ThemeProvider>
