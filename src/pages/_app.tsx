@@ -4,13 +4,15 @@ import Head from 'next/head';
 import { ThemeProvider } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 
+import { TriviaProvider } from 'contexts/TriviaContext';
+
 import { theme } from 'styles/theme';
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <>
       <Head>
-        <title>Trivia</title>
+        <title>Trivia Game!</title>
         <meta
           name="viewport"
           content="minimum-scale=1, initial-scale=1, width=device-width"
@@ -19,7 +21,10 @@ function MyApp({ Component, pageProps }: AppProps) {
 
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <Component {...pageProps} />
+
+        <TriviaProvider>
+          <Component {...pageProps} />
+        </TriviaProvider>
       </ThemeProvider>
     </>
   );
