@@ -1,4 +1,4 @@
-type Alternative = {
+export type Alternative = {
   sentence: string;
   correct: boolean;
   marked: boolean;

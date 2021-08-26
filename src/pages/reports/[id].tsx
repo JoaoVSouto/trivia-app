@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useRouter } from 'next/router';
 import {
   Container,
   Box,
@@ -15,6 +16,11 @@ import {
   darken,
 } from '@material-ui/core/styles';
 import NavigateBeforeIcon from '@material-ui/icons/NavigateBefore';
+import parse from 'html-react-parser';
+
+import { useTrivia } from 'contexts/TriviaContext';
+
+import { Alternative } from 'models/Question';
 
 import { QuestionCollapse } from 'components/QuestionCollapse';
 
@@ -86,7 +92,55 @@ const useStyles = makeStyles((theme: Theme) =>
 export default function Report() {
   const styles = useStyles();
 
-  if (!process.browser) {
+  const router = useRouter();
+  const triviaId = Number(router.query.id);
+
+  const { playedTrivias } = useTrivia();
+
+  const [renderCount, setRenderCount] = React.useState(0);
+
+  const trivia = React.useMemo(
+    () => playedTrivias.find(playedTrivia => playedTrivia.id === triviaId),
+    [playedTrivias, triviaId]
+  );
+
+  const correctPercentage = React.useMemo(
+    () => Math.round((trivia?.correctAmount / trivia?.questions.length) * 100),
+    [trivia]
+  );
+
+  const missesPercentage = React.useMemo(
+    () => 100 - correctPercentage,
+    [correctPercentage]
+  );
+
+  React.useEffect(() => {
+    if (!trivia) {
+      setRenderCount(state => state + 1);
+    }
+
+    if (renderCount > 25) {
+      router.push('/');
+    }
+  }, [renderCount, router, trivia]);
+
+  function handleQuestionAnswerVariant(alternative: Alternative) {
+    if (alternative.correct) {
+      return 'correct';
+    }
+
+    if (alternative.marked) {
+      return 'wrong';
+    }
+
+    return 'default';
+  }
+
+  function handleGoBack() {
+    router.push('/');
+  }
+
+  if (!process.browser || !trivia) {
     return null;
   }
 
@@ -94,40 +148,41 @@ export default function Report() {
     <Container maxWidth="sm" className={styles.root}>
       <Box borderRadius="borderRadius" bgcolor="grey.800" p={4}>
         <Typography variant="h4" className={styles.mainTitle} gutterBottom>
-          #1 <span>Trivia</span> relatory
+          #{triviaId} <span>Trivia</span> relatory
         </Typography>
 
         <div className={styles.progressContainer}>
           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Hits:
-          <LinearProgress variant="determinate" value={60} color="secondary" />
-          60% | 6/10
+          <LinearProgress
+            variant="determinate"
+            value={correctPercentage}
+            color="secondary"
+          />
+          {correctPercentage}% | {trivia.correctAmount}/
+          {trivia.questions.length}
         </div>
         <div className={styles.progressContainer}>
           Misses:
-          <MissesLinearProgress variant="determinate" value={40} />
-          40% | 4/10
+          <MissesLinearProgress
+            variant="determinate"
+            value={missesPercentage}
+          />
+          {missesPercentage}% | {trivia.wrongAmount}/{trivia.questions.length}
         </div>
 
         <List className={styles.questionsContainer}>
-          <QuestionCollapse
-            number={1}
-            correct
-            title="In the video-game franchise Kingdom Hearts, the main protagonist, carries a weapon with what shape?"
-            answers={[
-              { sentence: '33', variant: 'correct' },
-              { sentence: '42', variant: 'default' },
-            ]}
-          />
-          <QuestionCollapse
-            number={2}
-            correct={false}
-            title="In the original Star Trek TV series, what was Captain James T. Kirk's middle name?"
-            answers={[
-              { sentence: 'Darth Vader', variant: 'correct' },
-              { sentence: 'Luke Skywalker', variant: 'wrong' },
-              { sentence: 'Jaba', variant: 'default' },
-            ]}
-          />
+          {trivia.questions.map((question, index) => (
+            <QuestionCollapse
+              key={question.sentence}
+              number={index + 1}
+              correct={question.correct}
+              title={String(parse(question.sentence))}
+              answers={question.alternatives.map(alternative => ({
+                sentence: String(parse(alternative.sentence)),
+                variant: handleQuestionAnswerVariant(alternative),
+              }))}
+            />
+          ))}
         </List>
 
         <Button
@@ -135,6 +190,7 @@ export default function Report() {
           color="primary"
           endIcon={<NavigateBeforeIcon />}
           className={styles.backToHomeBtn}
+          onClick={handleGoBack}
         >
           Back
         </Button>
