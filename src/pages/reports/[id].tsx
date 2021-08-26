@@ -55,6 +55,24 @@ const useStyles = makeStyles((theme: Theme) =>
       maxHeight: theme.spacing(50),
       marginTop: theme.spacing(1),
       overflowY: 'auto',
+
+      '&::-webkit-scrollbar': {
+        width: '16px',
+      },
+
+      '&::-webkit-scrollbar-track': {
+        background: theme.palette.grey[800],
+      },
+
+      '&::-webkit-scrollbar-thumb': {
+        backgroundColor: theme.palette.grey[400],
+        borderRadius: '20px',
+        border: `5px solid ${theme.palette.grey[800]}`,
+      },
+
+      '&::-webkit-scrollbar-thumb:hover': {
+        backgroundColor: theme.palette.grey[500],
+      },
     },
   })
 );
@@ -92,66 +110,6 @@ export default function Report() {
             answers={[
               { sentence: '33', variant: 'correct' },
               { sentence: '42', variant: 'default' },
-            ]}
-          />
-          <QuestionCollapse
-            number={2}
-            correct={false}
-            title="In the original Star Trek TV series, what was Captain James T. Kirk's middle name?"
-            answers={[
-              { sentence: 'Darth Vader', variant: 'correct' },
-              { sentence: 'Luke Skywalker', variant: 'wrong' },
-              { sentence: 'Jaba', variant: 'default' },
-            ]}
-          />
-          <QuestionCollapse
-            number={2}
-            correct={false}
-            title="In the original Star Trek TV series, what was Captain James T. Kirk's middle name?"
-            answers={[
-              { sentence: 'Darth Vader', variant: 'correct' },
-              { sentence: 'Luke Skywalker', variant: 'wrong' },
-              { sentence: 'Jaba', variant: 'default' },
-            ]}
-          />
-          <QuestionCollapse
-            number={2}
-            correct={false}
-            title="In the original Star Trek TV series, what was Captain James T. Kirk's middle name?"
-            answers={[
-              { sentence: 'Darth Vader', variant: 'correct' },
-              { sentence: 'Luke Skywalker', variant: 'wrong' },
-              { sentence: 'Jaba', variant: 'default' },
-            ]}
-          />
-          <QuestionCollapse
-            number={2}
-            correct={false}
-            title="In the original Star Trek TV series, what was Captain James T. Kirk's middle name?"
-            answers={[
-              { sentence: 'Darth Vader', variant: 'correct' },
-              { sentence: 'Luke Skywalker', variant: 'wrong' },
-              { sentence: 'Jaba', variant: 'default' },
-            ]}
-          />
-          <QuestionCollapse
-            number={2}
-            correct={false}
-            title="In the original Star Trek TV series, what was Captain James T. Kirk's middle name?"
-            answers={[
-              { sentence: 'Darth Vader', variant: 'correct' },
-              { sentence: 'Luke Skywalker', variant: 'wrong' },
-              { sentence: 'Jaba', variant: 'default' },
-            ]}
-          />
-          <QuestionCollapse
-            number={2}
-            correct={false}
-            title="In the original Star Trek TV series, what was Captain James T. Kirk's middle name?"
-            answers={[
-              { sentence: 'Darth Vader', variant: 'correct' },
-              { sentence: 'Luke Skywalker', variant: 'wrong' },
-              { sentence: 'Jaba', variant: 'default' },
             ]}
           />
           <QuestionCollapse
