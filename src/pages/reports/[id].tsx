@@ -60,7 +60,7 @@ const useStyles = makeStyles((theme: Theme) =>
     },
 
     questionsContainer: {
-      maxHeight: theme.spacing(50),
+      maxHeight: '50vh',
       marginTop: theme.spacing(1),
       overflowY: 'auto',
 
@@ -97,8 +97,6 @@ export default function Report() {
 
   const { playedTrivias } = useTrivia();
 
-  const [renderCount, setRenderCount] = React.useState(0);
-
   const trivia = React.useMemo(
     () => playedTrivias.find(playedTrivia => playedTrivia.id === triviaId),
     [playedTrivias, triviaId]
@@ -113,16 +111,6 @@ export default function Report() {
     () => 100 - correctPercentage,
     [correctPercentage]
   );
-
-  React.useEffect(() => {
-    if (!trivia) {
-      setRenderCount(state => state + 1);
-    }
-
-    if (renderCount > 25) {
-      router.push('/');
-    }
-  }, [renderCount, router, trivia]);
 
   function handleQuestionAnswerVariant(alternative: Alternative) {
     if (alternative.correct) {

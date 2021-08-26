@@ -7,7 +7,7 @@ import {
   Typography,
   Theme,
 } from '@material-ui/core';
-import { makeStyles, createStyles } from '@material-ui/core/styles';
+import { makeStyles, createStyles, darken } from '@material-ui/core/styles';
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
@@ -39,6 +39,10 @@ const useStyles = makeStyles((theme: Theme) =>
 
     collapseOpener: {
       backgroundColor: theme.palette.grey[700],
+
+      '&:hover, &:focus': {
+        backgroundColor: darken(theme.palette.grey[700], 0.15),
+      },
     },
 
     questionMetadata: {
