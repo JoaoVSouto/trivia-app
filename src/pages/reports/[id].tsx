@@ -6,6 +6,7 @@ import {
   LinearProgress,
   Theme,
   List,
+  Button,
 } from '@material-ui/core';
 import {
   makeStyles,
@@ -13,6 +14,7 @@ import {
   withStyles,
   darken,
 } from '@material-ui/core/styles';
+import NavigateBeforeIcon from '@material-ui/icons/NavigateBefore';
 
 import { QuestionCollapse } from 'components/QuestionCollapse';
 
@@ -74,6 +76,10 @@ const useStyles = makeStyles((theme: Theme) =>
         backgroundColor: theme.palette.grey[500],
       },
     },
+
+    backToHomeBtn: {
+      marginTop: theme.spacing(2),
+    },
   })
 );
 
@@ -123,6 +129,15 @@ export default function Report() {
             ]}
           />
         </List>
+
+        <Button
+          variant="contained"
+          color="primary"
+          endIcon={<NavigateBeforeIcon />}
+          className={styles.backToHomeBtn}
+        >
+          Back
+        </Button>
       </Box>
     </Container>
   );
