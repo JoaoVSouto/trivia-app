@@ -54,13 +54,32 @@ export default function Lobby() {
     updateQuestionsQuantity,
     playTrivia,
     isFetchingQuestions,
+    correctQuestions,
+    wrongQuestions,
+    resetQuestionsCorrectness,
+    resetCurrentPage,
+    resetQuestionsAnswers,
   } = useTrivia();
 
   React.useEffect(() => {
+    if (correctQuestions.length > 0 || wrongQuestions.length > 0) {
+      resetQuestionsCorrectness();
+      resetCurrentPage();
+      resetQuestionsAnswers();
+    }
+
     if (questionsQuantity === 0) {
       router.push('/');
     }
-  }, [questionsQuantity, router]);
+  }, [
+    correctQuestions.length,
+    questionsQuantity,
+    resetCurrentPage,
+    resetQuestionsAnswers,
+    resetQuestionsCorrectness,
+    router,
+    wrongQuestions.length,
+  ]);
 
   function handleGoBack() {
     updateQuestionsQuantity(0);

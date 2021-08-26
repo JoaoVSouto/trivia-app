@@ -40,6 +40,9 @@ type TriviaContextData = {
   wrongQuestions: number[];
   playedTrivias: PlayedTrivia[];
   updateQuestionsQuantity: (quantity: number) => void;
+  resetQuestionsCorrectness: () => void;
+  resetCurrentPage: () => void;
+  resetQuestionsAnswers: () => void;
   playTrivia: () => void;
   moveToNextPage: () => void;
   markAnswer: (answerSentence: string) => void;
@@ -68,6 +71,27 @@ export function TriviaProvider({ children }: TriviaProviderProps) {
 
   function updateQuestionsQuantity(newQuestionsQuantity: number) {
     setQuestionsQuantity(newQuestionsQuantity);
+  }
+
+  function resetQuestionsCorrectness() {
+    setCorrectQuestions([]);
+    setWrongQuestions([]);
+  }
+
+  function resetCurrentPage() {
+    setCurrentPage(0);
+  }
+
+  function resetQuestionsAnswers() {
+    setCurrentQuestions(state =>
+      state.map(question => ({
+        ...question,
+        alternatives: question.alternatives.map(alternative => ({
+          ...alternative,
+          marked: false,
+        })),
+      }))
+    );
   }
 
   async function fetchQuestions() {
@@ -106,6 +130,7 @@ export function TriviaProvider({ children }: TriviaProviderProps) {
 
   async function playTrivia() {
     await fetchQuestions();
+    resetQuestionsCorrectness();
     router.push('/trivia');
   }
 
@@ -165,6 +190,9 @@ export function TriviaProvider({ children }: TriviaProviderProps) {
     <TriviaContext.Provider
       value={{
         questionsQuantity,
+        resetQuestionsCorrectness,
+        resetCurrentPage,
+        resetQuestionsAnswers,
         isFetchingQuestions,
         currentQuestions,
         currentPage,
