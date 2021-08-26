@@ -1,9 +1,31 @@
 import * as React from 'react';
 import { useRouter } from 'next/router';
+import { useLocalStorage } from 'react-use';
+
+import { shuffle } from 'utils/shuffle';
 
 import { Question } from 'models/Question';
 
 import { api } from 'services/api';
+
+type PlayedAlternative = {
+  correct: boolean;
+  marked: boolean;
+  sentence: string;
+};
+
+type PlayedQuestion = {
+  correct: boolean;
+  sentence: string;
+  alternatives: PlayedAlternative[];
+};
+
+type PlayedTrivia = {
+  id: number;
+  correctAmount: number;
+  wrongAmount: number;
+  questions: PlayedQuestion[];
+};
 
 type TriviaProviderProps = {
   children: React.ReactNode;
@@ -16,11 +38,14 @@ type TriviaContextData = {
   currentPage: number;
   correctQuestions: number[];
   wrongQuestions: number[];
+  playedTrivias: PlayedTrivia[];
   updateQuestionsQuantity: (quantity: number) => void;
   playTrivia: () => void;
   moveToNextPage: () => void;
+  markAnswer: (answerSentence: string) => void;
   addCorrectQuestion: () => void;
   addWrongQuestion: () => void;
+  addNewPlayedTrivia: () => void;
 };
 
 const TriviaContext = React.createContext({} as TriviaContextData);
@@ -30,6 +55,10 @@ export function TriviaProvider({ children }: TriviaProviderProps) {
 
   const [questionsQuantity, setQuestionsQuantity] = React.useState(0);
   const [isFetchingQuestions, setIsFetchingQuestions] = React.useState(false);
+  const [playedTrivias, setPlayedTrivias] = useLocalStorage<PlayedTrivia[]>(
+    '@trivia:played-trivias',
+    []
+  );
   const [currentQuestions, setCurrentQuestions] = React.useState<Question[]>(
     []
   );
@@ -51,7 +80,25 @@ export function TriviaProvider({ children }: TriviaProviderProps) {
         },
       });
 
-      setCurrentQuestions(response.data.results);
+      setCurrentQuestions(
+        response.data.results.map(
+          (question: Omit<Question, 'alternatives'>) => ({
+            ...question,
+            alternatives: shuffle([
+              {
+                sentence: question.correct_answer,
+                correct: true,
+                marked: false,
+              },
+              ...question.incorrect_answers.map(answer => ({
+                sentence: answer,
+                correct: false,
+                marked: false,
+              })),
+            ]),
+          })
+        )
+      );
     } finally {
       setIsFetchingQuestions(false);
     }
@@ -66,12 +113,52 @@ export function TriviaProvider({ children }: TriviaProviderProps) {
     setCurrentPage(state => state + 1);
   }
 
+  function markAnswer(answerSentence: string) {
+    setCurrentQuestions(state =>
+      state.map((question, index) => ({
+        ...question,
+        alternatives:
+          index === currentPage
+            ? question.alternatives.map(alternative => ({
+                ...alternative,
+                marked: alternative.sentence === answerSentence,
+              }))
+            : question.alternatives,
+      }))
+    );
+  }
+
   function addCorrectQuestion() {
     setCorrectQuestions(state => [...state, currentPage]);
   }
 
   function addWrongQuestion() {
     setWrongQuestions(state => [...state, currentPage]);
+  }
+
+  function resetState() {
+    setQuestionsQuantity(0);
+    setCurrentPage(0);
+    setCurrentQuestions([]);
+    setCorrectQuestions([]);
+    setWrongQuestions([]);
+  }
+
+  function addNewPlayedTrivia() {
+    const playedTrivia: PlayedTrivia = {
+      id: playedTrivias.length + 1,
+      correctAmount: correctQuestions.length,
+      wrongAmount: wrongQuestions.length,
+      questions: currentQuestions.map((question, index) => ({
+        correct: correctQuestions.includes(index),
+        sentence: question.question,
+        alternatives: question.alternatives,
+      })),
+    };
+
+    setPlayedTrivias(state => [...state, playedTrivia]);
+
+    resetState();
   }
 
   return (
@@ -83,11 +170,14 @@ export function TriviaProvider({ children }: TriviaProviderProps) {
         currentPage,
         correctQuestions,
         wrongQuestions,
+        playedTrivias,
         updateQuestionsQuantity,
         playTrivia,
         moveToNextPage,
+        markAnswer,
         addCorrectQuestion,
         addWrongQuestion,
+        addNewPlayedTrivia,
       }}
     >
       {children}

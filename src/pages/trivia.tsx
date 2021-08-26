@@ -10,11 +10,10 @@ import {
 } from '@material-ui/core';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
 import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight';
+import StarIcon from '@material-ui/icons/Star';
 import parse from 'html-react-parser';
 
 import { useTrivia } from 'contexts/TriviaContext';
-
-import { shuffle } from 'utils/shuffle';
 
 import { StepperDot } from 'components/StepperDot';
 import { AnswerButton } from 'components/AnswerButton';
@@ -49,6 +48,13 @@ const useStyles = makeStyles((theme: Theme) =>
       flex: 1,
       padding: `0 ${theme.spacing(2)}px`,
     },
+
+    finishBtn: {
+      '& .MuiSvgIcon-root': {
+        marginLeft: theme.spacing(0.5),
+        fontSize: theme.typography.button.fontSize,
+      },
+    },
   })
 );
 
@@ -62,10 +68,13 @@ export default function Trivia() {
     currentPage,
     questionsQuantity,
     moveToNextPage,
+    markAnswer,
     addCorrectQuestion,
     addWrongQuestion,
     correctQuestions,
     wrongQuestions,
+    addNewPlayedTrivia,
+    playedTrivias,
   } = useTrivia();
 
   const [selectedAnswer, setSelectedAnswer] = React.useState('');
@@ -73,19 +82,6 @@ export default function Trivia() {
   const currentQuestion = React.useMemo(
     () => currentQuestions[currentPage],
     [currentPage, currentQuestions]
-  );
-  const alternatives: Alternative[] = React.useMemo(
-    () =>
-      currentQuestion
-        ? shuffle([
-            { sentence: currentQuestion.correct_answer, correct: true },
-            ...currentQuestion.incorrect_answers.map(answer => ({
-              sentence: answer,
-              correct: false,
-            })),
-          ])
-        : [],
-    [currentQuestion]
   );
 
   React.useEffect(() => {
@@ -97,6 +93,11 @@ export default function Trivia() {
   function handleNextQuestion() {
     moveToNextPage();
     setSelectedAnswer('');
+  }
+
+  async function handleFinishTrivia() {
+    await router.push(`/reports/${playedTrivias.length + 1}`);
+    addNewPlayedTrivia();
   }
 
   function handleStepperDotVariant(index: number) {
@@ -120,6 +121,7 @@ export default function Trivia() {
       return;
     }
 
+    markAnswer(alternative.sentence);
     setSelectedAnswer(alternative.sentence);
 
     if (alternative.correct) {
@@ -168,17 +170,32 @@ export default function Trivia() {
                 />
               ))}
           </Box>
-          <Button
-            size="small"
-            variant="contained"
-            color="primary"
-            disableElevation
-            onClick={handleNextQuestion}
-            disabled={!selectedAnswer}
-          >
-            Next
-            <KeyboardArrowRightIcon />
-          </Button>
+          {currentPage === questionsQuantity - 1 ? (
+            <Button
+              size="small"
+              variant="contained"
+              color="primary"
+              disableElevation
+              onClick={handleFinishTrivia}
+              disabled={!selectedAnswer}
+              className={styles.finishBtn}
+            >
+              Finish
+              <StarIcon />
+            </Button>
+          ) : (
+            <Button
+              size="small"
+              variant="contained"
+              color="primary"
+              disableElevation
+              onClick={handleNextQuestion}
+              disabled={!selectedAnswer}
+            >
+              Next
+              <KeyboardArrowRightIcon />
+            </Button>
+          )}
         </div>
 
         <Typography variant="h5" gutterBottom>
@@ -186,7 +203,7 @@ export default function Trivia() {
         </Typography>
 
         <List>
-          {alternatives.map(alternative => (
+          {currentQuestion.alternatives.map(alternative => (
             <AnswerButton
               key={alternative.sentence}
               sentence={alternative.sentence}
