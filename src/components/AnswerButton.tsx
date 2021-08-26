@@ -5,15 +5,17 @@ import parse from 'html-react-parser';
 
 import { theme } from 'styles/theme';
 
-type Variants = 'correct' | 'wrong' | 'default';
+export type Variants = 'correct' | 'wrong' | 'default';
 
 type AnswerButtonProps = {
   sentence: string;
+  showcase?: boolean;
   variant?: Variants;
   onClick?: () => void;
 };
 
 type StylesProps = {
+  showcase: boolean;
   variant: Variants;
 };
 
@@ -39,21 +41,23 @@ const variantColors: VariantColors = {
   },
 };
 
-const useStyles = makeStyles((muiTheme: Theme) =>
+const useStyles = makeStyles<Theme, StylesProps>(muiTheme =>
   createStyles({
     listItem: {
       borderRadius: muiTheme.spacing(0.5),
-
-      '& + &': {
-        marginTop: muiTheme.spacing(2),
-      },
     },
 
-    coloration: ({ variant }: StylesProps) => ({
+    coloration: ({ variant }) => ({
       backgroundColor: variantColors[variant].regular,
 
       '&:hover, &:focus': {
         backgroundColor: variantColors[variant].hover,
+      },
+    }),
+
+    spacing: ({ showcase }) => ({
+      '& + .MuiListItem-button': {
+        marginTop: muiTheme.spacing(showcase ? 1 : 2),
       },
     }),
   })
@@ -62,14 +66,15 @@ const useStyles = makeStyles((muiTheme: Theme) =>
 export function AnswerButton({
   sentence,
   variant = 'default',
+  showcase = false,
   onClick,
 }: AnswerButtonProps) {
-  const styles = useStyles({ variant });
+  const styles = useStyles({ variant, showcase });
 
   return (
     <ListItem
       button
-      className={clsx(styles.listItem, styles.coloration)}
+      className={clsx(styles.listItem, styles.coloration, styles.spacing)}
       onClick={onClick}
     >
       <ListItemText primary={parse(sentence)} />

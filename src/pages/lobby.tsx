@@ -44,7 +44,7 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-export default function Home() {
+export default function Lobby() {
   const styles = useStyles();
 
   const router = useRouter();
