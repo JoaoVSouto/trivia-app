@@ -47,6 +47,29 @@ export default class MyDocument extends Document {
           />
 
           <meta name="theme-color" content={theme.palette.primary.main} />
+          <meta
+            name="description"
+            content="Test your general knowledge through exciting questions!"
+          />
+          <meta property="og:type" content="website" />
+          <meta
+            property="og:url"
+            content="https://trivia-app-joaovsouto.vercel.app"
+          />
+          <meta property="og:title" content="Trivia Game!" />
+          <meta
+            property="og:description"
+            content="Test your general knowledge through exciting questions!"
+          />
+          <meta
+            property="twitter:url"
+            content="https://trivia-app-joaovsouto.vercel.app"
+          />
+          <meta property="twitter:title" content="Trivia Game!" />
+          <meta
+            property="twitter:description"
+            content="Test your general knowledge through exciting questions!"
+          />
 
           <link
             rel="apple-touch-icon"
