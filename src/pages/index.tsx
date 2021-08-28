@@ -68,6 +68,10 @@ export default function Home() {
     router.push('/reports');
   }
 
+  if (!process.browser) {
+    return null;
+  }
+
   return (
     <Container maxWidth="sm">
       <Box>
