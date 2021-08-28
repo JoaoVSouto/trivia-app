@@ -9,6 +9,7 @@ import {
 } from '@material-ui/core';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
 import NavigateNextIcon from '@material-ui/icons/NavigateNext';
+import AssessmentIcon from '@material-ui/icons/Assessment';
 import clsx from 'clsx';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
@@ -39,7 +40,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
     btnContainer: {
       display: 'flex',
-      justifyContent: 'flex-end',
+      justifyContent: 'space-between',
       marginTop: theme.spacing(2),
     },
   })
@@ -69,6 +70,10 @@ export default function Home() {
       router.push('/lobby');
     },
   });
+
+  function handleNavigateToReports() {
+    router.push('/reports');
+  }
 
   return (
     <Container className={styles.root}>
@@ -102,6 +107,14 @@ export default function Home() {
             helperText={formik.touched.quantity && formik.errors.quantity}
           />
           <div className={styles.btnContainer}>
+            <Button
+              variant="outlined"
+              color="secondary"
+              endIcon={<AssessmentIcon />}
+              onClick={handleNavigateToReports}
+            >
+              Your reports
+            </Button>
             <Button
               type="submit"
               variant="contained"

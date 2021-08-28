@@ -1,10 +1,11 @@
 import * as React from 'react';
 import { useRouter } from 'next/router';
-import { useLocalStorage } from 'react-use';
 
 import { shuffle } from 'utils/shuffle';
 
 import { Question } from 'models/Question';
+
+import { usePersistedState } from 'hooks/usePersistedState';
 
 import { api } from 'services/api';
 
@@ -25,6 +26,7 @@ type PlayedTrivia = {
   correctAmount: number;
   wrongAmount: number;
   questions: PlayedQuestion[];
+  timestamp: number;
 };
 
 type TriviaProviderProps = {
@@ -58,7 +60,7 @@ export function TriviaProvider({ children }: TriviaProviderProps) {
 
   const [questionsQuantity, setQuestionsQuantity] = React.useState(0);
   const [isFetchingQuestions, setIsFetchingQuestions] = React.useState(false);
-  const [playedTrivias, setPlayedTrivias] = useLocalStorage<PlayedTrivia[]>(
+  const [playedTrivias, setPlayedTrivias] = usePersistedState<PlayedTrivia[]>(
     '@trivia:played-trivias',
     []
   );
@@ -179,9 +181,10 @@ export function TriviaProvider({ children }: TriviaProviderProps) {
         sentence: question.question,
         alternatives: question.alternatives,
       })),
+      timestamp: Date.now(),
     };
 
-    setPlayedTrivias(state => [...state, playedTrivia]);
+    setPlayedTrivias(state => state.concat(playedTrivia));
 
     resetState();
   }

@@ -24,6 +24,8 @@ import { Alternative } from 'models/Question';
 
 import { QuestionCollapse } from 'components/QuestionCollapse';
 
+import { customScrollbar } from 'styles/customScrollbar';
+
 const MissesLinearProgress = withStyles((theme: Theme) =>
   createStyles({
     colorPrimary: {
@@ -63,24 +65,7 @@ const useStyles = makeStyles((theme: Theme) =>
       maxHeight: '50vh',
       marginTop: theme.spacing(1),
       overflowY: 'auto',
-
-      '&::-webkit-scrollbar': {
-        width: '16px',
-      },
-
-      '&::-webkit-scrollbar-track': {
-        background: theme.palette.grey[800],
-      },
-
-      '&::-webkit-scrollbar-thumb': {
-        backgroundColor: theme.palette.grey[400],
-        borderRadius: '20px',
-        border: `5px solid ${theme.palette.grey[800]}`,
-      },
-
-      '&::-webkit-scrollbar-thumb:hover': {
-        backgroundColor: theme.palette.grey[500],
-      },
+      ...customScrollbar.scrollbar,
     },
 
     backToHomeBtn: {
@@ -125,7 +110,7 @@ export default function Report() {
   }
 
   function handleGoBack() {
-    router.push('/');
+    router.back();
   }
 
   if (!process.browser || !trivia) {
@@ -136,7 +121,7 @@ export default function Report() {
     <Container maxWidth="sm" className={styles.root}>
       <Box borderRadius="borderRadius" bgcolor="grey.800" p={4}>
         <Typography variant="h4" className={styles.mainTitle} gutterBottom>
-          #{triviaId} <span>Trivia</span> relatory
+          #{triviaId} <span>Trivia</span> report
         </Typography>
 
         <div className={styles.progressContainer}>
