@@ -68,6 +68,12 @@ export default function Report() {
 
   const { playedTrivias } = useTrivia();
 
+  React.useEffect(() => {
+    if (playedTrivias.length === 0) {
+      router.push('/');
+    }
+  }, [playedTrivias.length, router]);
+
   function handleNavigateToReport(reportId: number) {
     router.push(`/reports/${reportId}`);
   }
@@ -76,7 +82,7 @@ export default function Report() {
     router.push('/');
   }
 
-  if (!process.browser) {
+  if (!process.browser || playedTrivias.length === 0) {
     return null;
   }
 

@@ -58,7 +58,7 @@ export default function Home() {
 
   const router = useRouter();
 
-  const { updateQuestionsQuantity } = useTrivia();
+  const { updateQuestionsQuantity, playedTrivias } = useTrivia();
 
   const formik = useFormik({
     initialValues: {
@@ -107,14 +107,19 @@ export default function Home() {
             helperText={formik.touched.quantity && formik.errors.quantity}
           />
           <div className={styles.btnContainer}>
-            <Button
-              variant="outlined"
-              color="secondary"
-              endIcon={<AssessmentIcon />}
-              onClick={handleNavigateToReports}
-            >
-              Your reports
-            </Button>
+            {playedTrivias.length > 0 ? (
+              <Button
+                variant="outlined"
+                color="secondary"
+                endIcon={<AssessmentIcon />}
+                onClick={handleNavigateToReports}
+              >
+                Your reports
+              </Button>
+            ) : (
+              <span />
+            )}
+
             <Button
               type="submit"
               variant="contained"
