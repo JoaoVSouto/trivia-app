@@ -23,13 +23,6 @@ import { customScrollbar } from 'styles/customScrollbar';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
-    root: {
-      height: '100vh',
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-    },
-
     mainTitle: {
       fontWeight: 400,
       userSelect: 'none',
@@ -44,7 +37,6 @@ const useStyles = makeStyles((theme: Theme) =>
     reportBtn: {
       borderRadius: theme.spacing(0.5),
       backgroundColor: theme.palette.grey[700],
-      width: 'clamp(12rem, 20vw, 20rem)',
 
       '&:hover, &:focus': {
         backgroundColor: darken(theme.palette.grey[700], 0.1),
@@ -87,7 +79,7 @@ export default function Report() {
   }
 
   return (
-    <Container className={styles.root}>
+    <Container maxWidth="xs">
       <Box borderRadius="borderRadius" bgcolor="grey.800" p={4}>
         <Typography variant="h4" className={styles.mainTitle} gutterBottom>
           Reports

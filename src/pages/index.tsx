@@ -18,13 +18,6 @@ import { useTrivia } from 'contexts/TriviaContext';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
-    root: {
-      height: '100vh',
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-    },
-
     mainTitle: {
       fontWeight: 400,
       userSelect: 'none',
@@ -76,7 +69,7 @@ export default function Home() {
   }
 
   return (
-    <Container className={styles.root}>
+    <Container maxWidth="sm">
       <Box>
         <Typography
           className={clsx(styles.mainTitle, styles.title)}

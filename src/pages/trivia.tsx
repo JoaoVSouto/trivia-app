@@ -25,13 +25,6 @@ type Alternative = {
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
-    root: {
-      height: '100vh',
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-    },
-
     header: {
       marginBottom: theme.spacing(2),
 
@@ -148,7 +141,7 @@ export default function Trivia() {
   }
 
   return (
-    <Container maxWidth="sm" className={styles.root}>
+    <Container maxWidth="sm">
       <Box borderRadius="borderRadius" bgcolor="grey.800" p={4}>
         <div className={styles.header}>
           <Box display="flex" flexDirection="column">

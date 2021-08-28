@@ -16,13 +16,6 @@ import { useTrivia } from 'contexts/TriviaContext';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
-    root: {
-      height: '100vh',
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-    },
-
     mainTitle: {
       fontWeight: 400,
       userSelect: 'none',
@@ -87,7 +80,7 @@ export default function Lobby() {
   }
 
   return (
-    <Container className={styles.root}>
+    <Container>
       <Box>
         <Typography className={styles.mainTitle} variant="h2" align="center">
           Are you ready for the <span>Trivia</span>?

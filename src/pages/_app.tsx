@@ -1,14 +1,31 @@
 import * as React from 'react';
 import { AppProps } from 'next/app';
 import Head from 'next/head';
-import { ThemeProvider } from '@material-ui/core/styles';
+import {
+  ThemeProvider,
+  makeStyles,
+  createStyles,
+} from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 
 import { TriviaProvider } from 'contexts/TriviaContext';
 
 import { theme } from 'styles/theme';
 
+const useStyles = makeStyles(() =>
+  createStyles({
+    root: {
+      height: '100vh',
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+  })
+);
+
 function MyApp({ Component, pageProps }: AppProps) {
+  const styles = useStyles();
+
   return (
     <>
       <Head>
@@ -23,7 +40,9 @@ function MyApp({ Component, pageProps }: AppProps) {
         <CssBaseline />
 
         <TriviaProvider>
-          <Component {...pageProps} />
+          <main className={styles.root}>
+            <Component {...pageProps} />
+          </main>
         </TriviaProvider>
       </ThemeProvider>
     </>

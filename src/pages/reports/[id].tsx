@@ -39,13 +39,6 @@ const MissesLinearProgress = withStyles((theme: Theme) =>
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
-    root: {
-      height: '100vh',
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-    },
-
     mainTitle: {
       fontWeight: 400,
       userSelect: 'none',
@@ -118,7 +111,7 @@ export default function Report() {
   }
 
   return (
-    <Container maxWidth="sm" className={styles.root}>
+    <Container maxWidth="sm">
       <Box borderRadius="borderRadius" bgcolor="grey.800" p={4}>
         <Typography variant="h4" className={styles.mainTitle} gutterBottom>
           #{triviaId} <span>Trivia</span> report
