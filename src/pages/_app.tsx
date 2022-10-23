@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { AppProps } from 'next/app';
 import Head from 'next/head';
+import NextNProgress from 'nextjs-progressbar';
 import {
   ThemeProvider,
   makeStyles,
@@ -35,6 +36,13 @@ function MyApp({ Component, pageProps }: AppProps) {
           content="minimum-scale=1, initial-scale=1, width=device-width"
         />
       </Head>
+
+      <NextNProgress
+        color={theme.palette.primary.main}
+        startPosition={0.3}
+        stopDelayMs={200}
+        height={3}
+      />
 
       <ThemeProvider theme={theme}>
         <CssBaseline />
